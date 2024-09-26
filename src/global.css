@@ -1,0 +1,64 @@
+/* global.css */
+.reusable-table-cell {
+    @apply px-6 py-3 border-b-2 text-sm text-[#22173D]
+  }
+  
+  .reusable-table-header {
+    @apply py-3 px-6 bg-[#F0F1F3] font-bold border-b-2 text-xs  text-[#22173D] ;
+  }
+  
+  .reusable-actions {
+    @apply flex space-x-4;
+  }
+  
+  .reusable-checkbox {
+    @apply h-4 w-4 text-indigo-600 border-gray-300 rounded;
+  }
+  
+  
+  .reusable-status {
+    @apply px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full;
+  }
+
+  .button-style {
+
+    @apply border rounded-md  p-[6px] w-[75px] flex items-center gap-2;
+  }
+
+  .reuse-traveler{
+
+    @apply  flex gap-2 py-1 
+  }
+  
+  .traveler-text{
+
+    @apply  text-[12px]
+  }
+  .img-width{
+    @apply w-[12%]
+  }
+.earning-head{
+ @apply w-[100%] flex  py-3  bg-[#F0F1F3] font-bold border-b-2   text-[#22173D]
+}
+.earning-table{
+  @apply  py-2 border-b-2  text-[#22173D]
+}
+
+.reusable-earnings {
+  @apply h-4 w-4 mt-1 text-indigo-600 border-gray-300 rounded;
+}
+.Add-button{
+ @apply bg-[#9854FF]  font-semibold text-white py-1  px-6 rounded-xl
+
+}
+.sidebar-link {
+  @apply flex gap-2 rounded-2xl p-2 text-black transition-all duration-200 ease-in-out;
+}
+
+.sidebar-link:hover {
+  @apply bg-[#FAF5FF] ;
+}
+
+.active {
+  @apply text-[#9854FF] bg-[#FAF5FF];
+}
