@@ -1,3 +1,5 @@
+
+
 import React from 'react'
 import Layout from '../components/Layout'
 import Badge from '../assets/Badge.svg'
@@ -7,6 +9,7 @@ import Campain from '../assets/Campain.svg'
 import Export from '../assets/Export.svg'
 import graph from '../assets/graph.svg'
 import Piee from '../assets/Piee.svg'
+import LineChart from '../components/Linechart'
 const Analytics = () => {
   return (
     <Layout>
@@ -97,14 +100,8 @@ const Analytics = () => {
   { 
   // graph section 
   }
-  <section className='flex'>
-    <div className='ml-[-20px]'>
-<img src={graph} alt="error"  />
-    </div>
-    <div>
-<img src={Piee} alt="error"  />
-    </div>
-  </section>
+  <LineChart/>
+  
 
   <div className='flex gap-2  justify-between mt-4 w-full'>
     
@@ -162,6 +159,7 @@ const Analytics = () => {
   
   
 </main>
+
     </Layout>
   )
 }

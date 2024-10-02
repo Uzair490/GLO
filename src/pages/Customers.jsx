@@ -10,6 +10,7 @@ import All from '../assets/All.svg'
 import Vector from '../assets/Vector.svg'
 import pencil from '../assets/pencil.svg'
 import Customerbar from '../components/Customerbar';
+import Barchart from '../components/Barchart';
 const Customers = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
@@ -42,6 +43,7 @@ const Customers = () => {
   }, [selectedIds]);
 
   return (
+    <div>
     <Layout className="">
         <main className=''>
         <div className='flex justify-between  ml-3 mt-4  '>
@@ -165,8 +167,15 @@ const Customers = () => {
         </table>
       </div>
       </section>
+     
       </main>
+      <Barchart/>
     </Layout>
+    <div>
+    
+    </div>
+    </div>
+    
    );
 };
 

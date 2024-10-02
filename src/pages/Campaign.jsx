@@ -53,7 +53,7 @@ const Customers = () => {
        
        <input
          type="text"
-         className='border p-[6px] w-full bg-[#F0F1F3]  rounded placeholder:text-[13px] placeholder:pl-2  '  
+         className='border p-[6px] w-full bg-[#F0F1F3]  rounded placeholder:text-[13px] pl-3 '  
          placeholder='Search Campaigns'
          
        />

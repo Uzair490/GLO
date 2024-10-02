@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
     <div className="flex">
       <div className='w-[20%]'> <Adminsidebar  /></div>
      
-      <div className="w-[80%] border">
+      <div className="w-[80%] border-l">
         <Header />
         <div className="ml-8 mr-4">
           {children}
