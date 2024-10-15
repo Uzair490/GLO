@@ -15,14 +15,13 @@ const Login = () => {
     onCompleted: (data) => {
       const response = data.Gl_admin;
       if (response.__typename === 'GlAdmin') {
-        login(response.jwt); // Store the JWT token
-        // Redirect to a protected route or update UI accordingly
+        login(response.jwt);
       } else if (response.__typename === 'Error') {
-        setErrorMessage(response.message); // Display error message
+        setErrorMessage(response.message); 
       }
     },
     onError: (error) => {
-      setErrorMessage(error.message); // Handle network or GraphQL errors
+      setErrorMessage(error.message); 
     },
   });
  

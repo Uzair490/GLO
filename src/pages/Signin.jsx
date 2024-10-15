@@ -16,7 +16,7 @@ function Signin() {
   const [fcmToken, setFcmToken] = useState('');
   const [loginQuery, { loading, error, data }] = useLazyQuery(LOGIN_QUERY);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Access login from AuthContext
+  const { login } = useAuth(); 
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -116,7 +116,7 @@ function Signin() {
 
       <section className='w-[50%]'>
         <div className='relative'>
-          <img src={bg} alt="error" className='w-[100%] h-[100vh]' />
+          <img src={bg} alt="error" className='w-[100%] h-[100vh] rounded-bl-[70px]' />
           <div className='absolute top-[30%] left-[27%]'>
             <img src={Logo} alt="error" />
             <div className='border px-4 py-4 rounded-xl text-center mt-10'>

@@ -194,6 +194,39 @@ const Barchart = () => {
         <p className=' text-[#2E2D74] mt-2 rounded h-6 text-[12px] font-semibold px-[10px] py-[4px]  bg-[#2E2D7433]'>View</p>
         </div>
       </div>
+      <div className='flex gap-3 mt-5'>
+        <img src={view} alt="error" />
+        <div className='flex  w-full justify-between'>
+        <div className=''>
+          <h1 className='text-[13px] font-semibold'>Global travelers</h1>
+          <p className='text-[10px] mt-[-2px]'>Campain started</p>
+         
+        </div>
+        <p className=' text-[#F86624] mt-2 rounded h-6 text-[12px] font-semibold px-[10px] py-[4px]  bg-[#F9731633]'>View</p>
+        </div>
+      </div>
+      <div className='flex gap-3 mt-5'>
+        <img src={view} alt="error" />
+        <div className='flex  w-full justify-between'>
+        <div className=''>
+          <h1 className='text-[13px] font-semibold'>ABN Consultants </h1>
+          <p className='text-[10px] mt-[-2px]'>Shared a Post</p>
+         
+        </div>
+        <p className=' text-[#883DCF]  mt-2 rounded h-6 text-[12px] font-semibold px-[10px] py-[4px]  bg-[#883DCF33]'>View</p>
+        </div>
+      </div>
+      <div className='flex gap-3 mt-5'>
+        <img src={view} alt="error" />
+        <div className='flex  w-full justify-between'>
+        <div className=''>
+          <h1 className='text-[13px] font-semibold'>Free World </h1>
+          <p className='text-[10px] mt-[-2px]'>Purchased gold package </p>
+         
+        </div>
+        <p className=' text-[#2E2D74] mt-2 rounded h-6 text-[12px] font-semibold px-[10px] py-[4px]  bg-[#2E2D7433]'>View</p>
+        </div>
+      </div>
       </div>
      
     </div>

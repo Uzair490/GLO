@@ -6,7 +6,7 @@ import photo from '../assets/photo.svg'
 import idd from '../assets/idd.svg'
 import Email from '../assets/Email.svg'
 import address from '../assets/address.svg'
-import customer from '../assets/customer.svg'
+import customerss from '../assets/customerss.svg'
 import phone from '../assets/phone.svg'
 import type from '../assets/type.svg'
 import gold from '../assets/gold.svg'
@@ -15,38 +15,58 @@ import Cart from '../assets/Cart.svg'
 import Campain from  '../assets/Campain.svg'
 import Green from '../assets/Green.svg'
 import Export from '../assets/Export.svg'
+import { GET_ALL_CUSTOMERS } from '../queries';
+import { useQuery } from '@apollo/client';
 const AccountDetails = () => {
-    
-        const [selectedIds, setSelectedIds] = useState([]);
-        const [selectAll, setSelectAll] = useState(false);
-      
-        const campaigns = [
-          { id: 1, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  },
-          { id: 2, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  },
-          { id: 3, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  }
-         
-        ];
-      
-        const handleSelectAll = () => {
-          setSelectAll(!selectAll);
-          setSelectedIds(!selectAll ? campaigns.map((campaign) => campaign.id) : []);
-        };
-      
-        const handleSelect = (id) => {
-          if (selectedIds.includes(id)) {
-            setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
-          } else {
-            setSelectedIds([...selectedIds, id]);
-          }
-        };
-      
-        useEffect(() => {
-          if (selectedIds.length === campaigns.length) {
-            setSelectAll(true);
-          } else {
-            setSelectAll(false);
-          }
-        }, [selectedIds]);
+  const campaigns = [
+    { id: 1, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  },
+    { id: 2, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  },
+    { id: 3, TransactionDetails: 'User Engagement', Total: '1234$', Date: '12-sep',  }
+   
+  ];
+
+  const { loading, error, data } = useQuery(GET_ALL_CUSTOMERS);
+  
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    if (!loading && data) {
+      const allCustomers = data?.glAdmin?.AllCustomers;
+      if (allCustomers && !('status' in allCustomers)) {
+        setCustomers(allCustomers.items || []);
+      } else {
+        console.error('Error fetching customers:', allCustomers?.message || 'No data received');
+      }
+    }
+  }, [loading, data]);
+
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    setSelectedIds(!selectAll ? customers.map((customer) => customer.id) : []);
+  };
+
+  const handleSelect = (id) => {
+    if (selectedIds.includes(id)) {
+      setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
+    } else {
+      setSelectedIds([...selectedIds, id]);
+    }
+  };
+
+  useEffect(() => {
+    setSelectAll(selectedIds.length === customers.length);
+  }, [selectedIds, customers.length]);
+
+  const customer = customers[0]; // Use the first customer for display
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: Unable to fetch data. {error.message}</p>;
+  if (customers.length === 0) {
+    return <p>No customers available.</p>;
+  }
+
   return (
     <Layout>
      <Customerbar/>
@@ -76,42 +96,42 @@ const AccountDetails = () => {
         <img src={idd} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Customer ID</p>
-        <p className='traveler-text'>Id</p>
+        <p className='traveler-text'>{customer.id}</p>
         </div>
     </div>
     <div className='reuse-traveler'>
         <img src={Email} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Email</p>
-        <p className='traveler-text'>123@gmail.com</p>
+        <p className='traveler-text'>{customer.email}</p>
         </div>
     </div>
     <div className='reuse-traveler'>
         <img src={address} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Address</p>
-        <p className='traveler-text'>england strell-15-A</p>
+        <p className='traveler-text'>{customer.address}</p>
         </div>
     </div>
     <div className='reuse-traveler'>
         <img src={phone} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Phone Number</p>
-        <p className='traveler-text'>123456789</p>
+        <p className='traveler-text'>{customer.phone}</p>
         </div>
     </div>
     <div className='reuse-traveler'>
         <img src={type} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Account Type</p>
-        <p className='traveler-text'>EnterPrize</p>
+        <p className='traveler-text'>{customer.enterprize}</p>
         </div>
     </div>
     <div className='reuse-traveler'>
-        <img src={customer} alt='error' className='img-width' />
+        <img src={customerss} alt='error' className='img-width' />
         <div>
         <p className='traveler-text'>Customer Since</p>
-        <p className='traveler-text'>12 December 2022</p>
+        <p className='traveler-text'>{customer.startdate}</p>
         </div>
     </div>
     <div className='reuse-traveler'>

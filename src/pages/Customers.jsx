@@ -16,7 +16,8 @@ const Customers = () => {
   const [selectAll, setSelectAll] = useState(false);
 
   const campaigns = [
-    { id: 7, campaign: 'User Engagement', createdBy: 'John Doe', phoneNumber: '1234577767', startDate: '2024-06-01', endDate: '2024-06-30', status: 'Active' },
+    
+    { id: 1, campaign: 'User Engagement', createdBy: 'John Doe', phoneNumber: '1234577767', startDate: '2024-06-01', endDate: '2024-06-30', status: 'Active' },
     { id: 2, campaign: 'Winter Discount', createdBy: 'Jane Smith', phoneNumber: '2345678', startDate: '2024-11-01', endDate: '2024-12-31', status: 'Active' },
     { id: 3, campaign: 'Spring Clearance', createdBy: 'Paul Walker', phoneNumber: '3456789', startDate: '2024-03-01', endDate: '2024-03-15', status: 'Active' },
   ];

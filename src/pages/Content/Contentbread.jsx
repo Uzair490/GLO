@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import Vector from '../assets/Vector.svg';
+import Vector from '../../assets/Vector.svg';
 
-const Customerbar = () => {
+const Contentbread = () => {
   const location = useLocation();
 
   const getLinkClasses = (path) => {
@@ -18,10 +18,10 @@ const Customerbar = () => {
     <div>
       {/* Breadcrumbs */}
       <div className='flex items-center gap-3'>
-        <p className='text-[11px]'>Contents</p>
+        <p className='text-[11px]'>Settings</p>
         <img src={Vector} alt="arrow" />
+       
         
-
         {pathSegments.map((segment, index) => {
           const path = `/${pathSegments.slice(0, index + 1).join('/')}`;
           const isLast = index === pathSegments.length - 1;
@@ -46,22 +46,23 @@ const Customerbar = () => {
       </div>
 
       {/* Navigation Links */}
-      <div className='flex gap-3 border-b-2'>
-        <Link to='/accountdetails' className={`text-[14px] font-semibold ${getLinkClasses('/accountdetails')}`}>
-          Account Details
+      <div className='flex gap-3 border-b-2 '>
+        <Link to='/all' className={`text-[14px] font-semibold ${getLinkClasses('/all')}`}>
+          All
         </Link>
-        <Link to='/campaign' className={`text-[14px] font-semibold ${getLinkClasses('/campaign')}`}>
-          Campaigns
+        <Link to='/publish' className={`text-[14px] font-semibold ${getLinkClasses('/publish')}`}>
+         Published
         </Link>
-        <Link to='/accountusers' className={`text-[14px] font-semibold ${getLinkClasses('/accountusers')}`}>
-          Account Users
+       
+        <Link to='/republish' className={`text-[14px] font-semibold ${getLinkClasses('/republish')}`}>
+         Republished
         </Link>
-        <Link to='/earnings' className={`text-[14px] font-semibold ${getLinkClasses('/earnings')}`}>
-          Earnings
+        <Link to='/unpublish' className={`text-[14px] font-semibold ${getLinkClasses('/unpublish')}`}>
+         Unpublished
         </Link>
       </div>
     </div>
   );
 };
 
-export default Customerbar;
+export default Contentbread;
