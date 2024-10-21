@@ -1,93 +1,24 @@
 import { useState } from "react";
 import BreadCrumb from "../../../components/shared/breadcrumb/BreadCrumb";
-import { useMutation, gql } from "@apollo/client";
+
 import BgIcon from "../../../assets/images/notifications/bgIcon.svg";
 import CloseIcon from "../../../assets/images/notifications/close.svg";
 import MusicIcon from "../../../assets/images/notifications/headphones-light.svg";
 import EditIcon from "../../../assets/images/marketing/EditIcon.svg";
 import CrossIcon from "../../../assets/images/marketing/cancel.svg";
 import Layout from "../../Layout";
-const CREATE_CAMPAIGN_MUTATION = gql`
-  mutation CreateCampaign($input: CreateCampaignInput!) {
-    glAdmin {
-      createCampaign(input: $input) {
-        ... on CampaignResponse {
-          status
-          message
-          campaign {
-            id
-            campaignName
-            targetAudience
-            description
-            startDate
-            endDate
-            publishStatus
-            activeStatus
-            impressionsCount
-            clicksCount
-            earning
-            campaignType
-            isDeleted
-            deletedAt
-            updatedAt
-            createdAt
-            imageUrls
-            videoUrls
-            audioUrls
-          }
-        }
-        ... on Error {
-          status
-          message
-        }
-      }
-    }
-  }
-`;
-const ShareCampaign = () => {
-  const [formData, setFormData] = useState({
-    campaignName: "",
-    targetAudience: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    publishStatus: false,
-    activeStatus: false,
-    campaignType: "",
-    imageUrls: [""],
-    videoUrls: [""],
-    audioUrls: [""],
-  });
 
-  const [ShareCampaign, { data, loading, error }] = useMutation(CREATE_CAMPAIGN_MUTATION);
+const AddNewCampaign = () => {
+  const [value, setValue] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    const formattedData = {
-      ...formData,
-      startDate: new Date(formData.startDate).toISOString(),
-      endDate: new Date(formData.endDate).toISOString(),
-    };
-    ShareCampaign({ variables: { input: formattedData } })
-      .then((response) => {
-        console.log("Campaign created:", response.data.glAdmin.ShareCampaign);
-      })
-      .catch((err) => {
-        console.error("Error creating campaign:", err);
-      });
+  const handleInputChange = (e) => {
+    console.log(e.target.value);
+    setValue(e.target.value);
   };
   return (
     <Layout>
-      <div className="flex flex-col justify-between gap-8"   onSubmit={handleSubmit}>
+      
+      <div className="flex flex-col justify-between gap-8">
         <p className="flex gap-2 font-semibold items-center text-[#0C0D0F] text-lg">
           Share Campaign
           <img src={EditIcon} alt="" />
@@ -104,49 +35,48 @@ const ShareCampaign = () => {
           {/* row 1 */}
           <div className="w-full flex-wrap flex justify-between">
             <div
-              className="flex flex-col mt-2"
-             
+              className="flex flex-col mt-2 w-1/3"
+              style={{ flexBasis: "calc(50% - 16px)" }}
             >
               <h2 className="text-base font-normal text-[#22173D]">
                 Campaign Name*
               </h2>
               <input
-              value={formData.campaignName}
-              onChange={handleChange}
+                value={value}
+                onChange={handleInputChange}
                 type="text"
-               
+                placeholder="User engagement"
                 className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4"
               />
             </div>
             <div
-              className="flex flex-col mt-2"
-              
-            >
-              <h2 className="text-base font-normal text-[#22173D]">
-                Target Audiance
-              </h2>
-              <input
-                value={formData.targetAudience}
-                onChange={handleChange}
-                type="text"
-               
-                className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4"
-              />
-            </div>
-            <div
-              className="flex flex-col mt-2"
+              className="flex flex-col mt-2 w-1/3"
               style={{ flexBasis: "calc(50% - 16px)" }}
             >
               <h2 className="text-base font-normal text-[#22173D]">
-              
+                Target Audience*
               </h2>
               <select className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4">
                 <option value="" disabled selected>
-                Campaign Type*
+                  GeoLanes Users
                 </option>
                 <option value="user1">User 1</option>
                 <option value="user2">User 2</option>
                 <option value="user3">User 3</option>
+              </select>
+            </div>
+            <div
+              className="flex flex-col mt-2 w-1/3"
+              style={{ flexBasis: "calc(50% - 16px)" }}
+            >
+              <h2 className="text-base font-normal text-[#22173D]">
+                Campaign Type
+              </h2>
+              <select className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4">
+                <option value="" disabled selected>
+                 User Engagement
+                </option>
+                
               </select>
             </div>
           </div>
@@ -161,9 +91,9 @@ const ShareCampaign = () => {
                   Description
                 </h2>
                 <input
-                  
-                  value={formData.description}
-            onChange={handleChange}
+                  value={value}
+                  onChange={handleInputChange}
+                  type="text"
                   placeholder="Description goes here"
                   className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4"
                 />
@@ -180,8 +110,8 @@ const ShareCampaign = () => {
                 Start Date*
               </h2>
               <input
-                value={formData.startDate}
-                onChange={handleChange}
+                value={value}
+                onChange={handleInputChange}
                 type="date"
                 placeholder="MM-DD-YYYY"
                 className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4"
@@ -195,8 +125,8 @@ const ShareCampaign = () => {
                 End date*
               </h2>
               <input
-                value={formData.endDate}
-                onChange={handleChange}
+                value={value}
+                onChange={handleInputChange}
                 type="date"
                 placeholder="MM-DD-YYYY"
                 className="w-full h-12 mt-2 border outline-none border-[#E0E5F2] rounded-xl px-4"
@@ -319,20 +249,9 @@ const ShareCampaign = () => {
                     />
                     <div className="flex justify-between px-3 py-2 w-full">
                       <img src={MusicIcon} alt="music icon" />
-
-                      <input type="url" 
-                      
-                      name="videoUrls"
-                      value={formData.videoUrls[0]}
-                      onChange={(e) =>
-                        setFormData({ ...formData, videoUrls: [e.target.value] })
-                      }
-                      
-                      className="text-xs font-normal text-[#22173D]" 
-                      placeholder='  Audio file.mp3'
-                      />
-                      
-                    
+                      <p className="text-xs font-normal text-[#22173D]">
+                        Audio file.mp3
+                      </p>
                     </div>
                     <div className="flex justify-between border-t-2 border-[#9854FF] py-2 w-[90%]">
                       <p className="text-xs font-normal text-[#22173D]">
@@ -380,7 +299,7 @@ const ShareCampaign = () => {
             Cancel
           </button>
           <button className="text-white bg-[#9854ff] h-[40px] px-4 py-2 rounded-[10px] text-xs">
-            Submit
+           Submit
           </button>
         </div>
       </div>
@@ -388,4 +307,4 @@ const ShareCampaign = () => {
   );
 };
 
-export default ShareCampaign;
+export default AddNewCampaign;

@@ -236,7 +236,8 @@ const ChartCompoent = () => {
   return (
     <div>
       <section>
-       <div className='border shadow-sm rounded-lg'><img src={AS} alt="Piee" srcset="" /></div> 
+      
+       <div className='border shadow-sm rounded-lg'><img src={AS} alt="Piee"  /></div> 
       </section>
     </div>
   )

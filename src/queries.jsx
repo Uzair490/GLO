@@ -62,3 +62,65 @@ export const GET_ALL_CUSTOMERS = gql`
 // queries.js
 
 
+export const GET_ALL_CAMPAIGNS = gql`
+  query AllCampaigns {
+    allCampaigns(input: { page: 1 }) {
+      ... on CampaignResponse {
+        status
+        message
+        campaign {
+          id
+          campaignName
+          targetAudience
+          description
+          startDate
+          endDate
+          publishStatus
+          activeStatus
+          impressionsCount
+          clicksCount
+          earning
+          campaignType
+          isDeleted
+          deletedAt
+          updatedAt
+          createdAt
+          imageUrls
+          videoUrls
+          audioUrls
+        }
+      }
+      ... on Error {
+        status
+        message
+      }
+      ... on PaginatedCampaignList {
+        status
+        message
+        page
+        totalCount
+        data {
+          id
+          campaignName
+          targetAudience
+          description
+          startDate
+          endDate
+          publishStatus
+          activeStatus
+          impressionsCount
+          clicksCount
+          earning
+          campaignType
+          isDeleted
+          deletedAt
+          updatedAt
+          createdAt
+          imageUrls
+          videoUrls
+          audioUrls
+        }
+      }
+    }
+  }
+`;

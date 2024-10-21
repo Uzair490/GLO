@@ -38,6 +38,9 @@ import Enotification from './pages/Enterprisepages/Enotification'
 import EContent from './pages/Enterprisepages/Content/EContent'
 import MarketingMain  from '../src/components/marketing/MarketingMain'
 import NotificationsComponent from './components/notifications/NotificationsComponent'
+import UpdateCampaign from './components/marketing/campaigns/UpdateCampaign'
+import CampaignDetail from './components/marketing/campaigns/CampaignDetail'
+
 const App = () => {
   return (
     <>
@@ -91,6 +94,8 @@ const App = () => {
 <Route path="/Esetting" element={<Esetting/>}/>
 <Route path="/Enotification" element={<Enotification/>}/>
 <Route path="/notification" element={<NotificationsComponent/>}/>
+<Route path="/campaign-detail/:id" element={<CampaignDetail />} />
+<Route path="/update-campaign/:id" element={<UpdateCampaign />} />
 
     </Routes>
   

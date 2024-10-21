@@ -1,247 +1,258 @@
-import React, { useState } from "react";
-import { useMutation, gql } from "@apollo/client";
-import Layout from "../../Layout";
 
-// GraphQL Mutation for creating a campaign
-const CREATE_CAMPAIGN_MUTATION = gql`
-  mutation CreateCampaign($input: CreateCampaignInput!) {
-    glAdmin {
-      createCampaign(input: $input) {
-        ... on CampaignResponse {
-          status
-          message
-          campaign {
-            id
-            campaignName
-            targetAudience
-            description
-            startDate
-            endDate
-            publishStatus
-            activeStatus
-            impressionsCount
-            clicksCount
-            earning
-            campaignType
-            isDeleted
-            deletedAt
-            updatedAt
-            createdAt
-            imageUrls
-            videoUrls
-            audioUrls
-          }
-        }
-        ... on Error {
-          status
-          message
-        }
-      }
-    }
-  }
-`;
+import { useState, useRef } from 'react'; // Import useRef
+import { useMutation, gql } from '@apollo/client';
+import Layout from '../../Layout';
+import img from '../../../assets/img.svg';
+import { FaVideo, FaMusic } from 'react-icons/fa'; // Importing icons from react-icons
+import video from '../../../assets/video.svg';
+import audio from '../../../assets/audio.svg';
 
-const CreateCampaignForm = () => {
-  const [formData, setFormData] = useState({
-    campaignName: "",
-    targetAudience: "",
-    description: "",
-    startDate: "",
-    endDate: "",
-    publishStatus: false,
-    activeStatus: false,
-    campaignType: "",
-    imageUrls: [""],
-    videoUrls: [""],
-    audioUrls: [""],
+import  {CREATE_CAMPAIGN_MUTATION} from './queries'
+
+const CreateCampaign = () => {
+  const [campaignData, setCampaignData] = useState({
+    campaignName: '',
+    targetAudience: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    campaignType: '',
+    publishStatus: true,
+    activeStatus: true,
+    imageUrls: [],
+    videoUrls: [],
+    audioUrls: [],
   });
 
+  const imageInputRef = useRef(null); // Create a ref for the image input
+  const videoInputRef = useRef(null); // Create a ref for the video input
+  const audioInputRef = useRef(null); // Create a ref for the audio input
   const [createCampaign, { data, loading, error }] = useMutation(CREATE_CAMPAIGN_MUTATION);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
-      [name]: type === "checkbox" ? checked : value,
+    setCampaignData({
+      ...campaignData,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleFileChange = (e, type) => {
+    const files = Array.from(e.target.files);
+    const fileURLs = files.map(file => URL.createObjectURL(file));
+
+    setCampaignData((prevData) => ({
+      ...prevData,
+      [type]: fileURLs,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const formattedData = {
-      ...formData,
-      startDate: new Date(formData.startDate).toISOString(),
-      endDate: new Date(formData.endDate).toISOString(),
-    };
-    createCampaign({ variables: { input: formattedData } })
-      .then((response) => {
-        console.log("Campaign created:", response.data.glAdmin.createCampaign);
-      })
-      .catch((err) => {
-        console.error("Error creating campaign:", err);
-      });
+    try {
+      await createCampaign({ variables: { input: campaignData } });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddImageClick = () => {
+    if (imageInputRef.current) {
+      imageInputRef.current.click();
+    }
+  };
+
+  const handleAddVideoClick = () => {
+    if (videoInputRef.current) {
+      videoInputRef.current.click(); // Trigger video input click
+    }
+  };
+
+  const handleAddAudioClick = () => {
+    if (audioInputRef.current) {
+      audioInputRef.current.click(); // Trigger audio input click
+    }
   };
 
   return (
-
-    <Layout>
-    <div className="">
-      <h2 className="text-2xl font-bold mb-4">Create Campaign</h2>
+    <Layout className="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <h1 className='mt-12 font-semibold'>Marketing</h1>
       <form onSubmit={handleSubmit}>
-        <main className="border shadow-lg">
-        <section className="flex gap-4 w-full"> 
-        <div className="mb-4 w-[33%]">
-          <label className="block text-gray-700">Campaign Name</label>
-          <input
-            type="text"
-            name="campaignName"
-            value={formData.campaignName}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4 w-[33%]">
-          <label className="block text-gray-700">Target Audience</label>
-          <input
-            type="text"
-            name="targetAudience"
-            value={formData.targetAudience}
-            onChange={handleChange}
-            className="mt-1 w-full p-2  border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4 w-[33%]">
-          <label className="block text-gray-700">Campaign Type</label>
-          <input
-            type="text"
-            name="campaignType"
-            value={formData.campaignType}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full  border rounded"
-            required
-          />
-        </div>
-       
-        </section>
-        <div className="mb-4">
-          <label className="block text-gray-700">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-        <section className="flex ">
-
-        <div className="mb-4">
-          <label className="block text-gray-700">Start Date</label>
-          <input
-            type="datetime-local"
-            name="startDate"
-            value={formData.startDate}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">End Date</label>
-          <input
-            type="datetime-local"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Schedule Date</label>
-          <input
-            type="datetime-local"
-            name="endDate"
-            value={formData.endDate}
-            onChange={handleChange}
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-        </section>
+        <main className='border shadow-md rounded-lg p-4'>
+          <p className='text-[18px] font-semibold'>General Information</p>
+          <section className='flex gap-4 w-full'>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Campaign Name</label>
+              <input
+                type="text"
+                name="campaignName"
+                value={campaignData.campaignName}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Target Audience</label>
+              <input
+                type="text"
+                name="targetAudience"
+                value={campaignData.targetAudience}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Campaign Type</label>
+              <input
+                type="text"
+                name="campaignType"
+                value={campaignData.campaignType}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+          </section>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea
+              name="description"
+              value={campaignData.description}
+              onChange={handleChange}
+              className="mt-1 h-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              rows="4"
+              required
+            />
+          </div>
+          <section className='flex gap-4 mt-2'>
+            <div className='w-[33%]'>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+              <input
+                type="date"
+                name="startDate"
+                value={campaignData.startDate}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+            <div className='w-[33%]'>
+              <label className="block text-sm font-medium mb-1 text-gray-700">End Date</label>
+              <input
+                type="date"
+                name="endDate"
+                value={campaignData.endDate}
+                onChange={handleChange}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+              />
+            </div>
+          </section>
         </main>
-        <div className="mb-4">
-          <label className="block text-gray-700">Image URL</label>
-          <input
-            type="url"
-            name="imageUrls"
-            value={formData.imageUrls[0]}
-            onChange={(e) =>
-              setFormData({ ...formData, imageUrls: [e.target.value] })
-            }
-            className="mt-1 p-2 w-full border rounded"
-            required
-          />
-        </div>
-      
-        <div className="mb-4">
-          <label className="block text-gray-700">Audio URL</label>
-          <input
-            type="url"
-            name="audioUrls"
-            value={formData.audioUrls[0]}
-            onChange={(e) =>
-              setFormData({ ...formData, audioUrls: [e.target.value] })
-            }
-            className="mt-1 p-2 w-full border rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Publish Status</label>
-          <input
-            type="checkbox"
-            name="publishStatus"
-            checked={formData.publishStatus}
-            onChange={handleChange}
-            className="mt-1"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Active Status</label>
-          <input
-            type="checkbox"
-            name="activeStatus"
-            checked={formData.activeStatus}
-            onChange={handleChange}
-            className="mt-1"
-          />
-        </div>
+
+        <main className='border mt-7 shadow-md rounded-lg p-4'>
+          <p className='text-[18px] font-semibold'>Media</p>
+          <section className='flex gap-6 mt-2'>
+            {/* Image Upload Section */}
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Photos</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                  src={campaignData.imageUrls[0] || img}
+                  alt="Uploaded Logo"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="imageLo" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                    ref={imageInputRef} // Attach the ref here
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, 'imageUrls')}
+                  />
+                  <span className="text-[14px] font-normal">Drag and drop logo image here or click add <span className='flex justify-center'>image</span></span>
+                </label>
+                <button
+                  type="button" // Change type to button
+                  className="mt-2 bg-[#FAF5FF] text-[#9854FF] text-[14px] mb-2 px-[14px] py-[7px] rounded-md"
+                  onClick={handleAddImageClick} // Trigger file input click
+                >
+                  Add Image
+                </button>
+              </div>
+            </div>
+
+            {/* Video Upload Section */}
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Videos</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                  src={campaignData.videoUrls[0] || video}
+                  alt="Uploaded Video"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="videoUpload" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                    ref={videoInputRef} // Attach the ref here
+                    className="hidden"
+                    accept="video/*"
+                    onChange={(e) => handleFileChange(e, 'videoUrls')}
+                  />
+                  <span className="text-[14px] font-normal">Drag and drop video here, or click add <span className='flex justify-center'>video</span></span>
+                </label>
+                <button
+                  type="button" // Change type to button
+                  className="mt-2 bg-[#FAF5FF] text-[#9854FF] text-[14px] mb-2 px-[14px] py-[7px] rounded-md"
+                  onClick={handleAddVideoClick} // Trigger file input click
+                >
+                  Add Video
+                </button>
+              </div>
+            </div>
+
+            {/* Audio Upload Section */}
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Audio</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                  src={campaignData.audioUrls[0] || audio}
+                  alt="Uploaded Audio"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="audioUpload" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                    ref={audioInputRef} // Attach the ref here
+                    className="hidden"
+                    accept="audio/*"
+                    onChange={(e) => handleFileChange(e, 'audioUrls')}
+                  />
+                  <span className="text-[14px] font-normal">Drag and drop audio here, or click add <span className='flex justify-center'>audio</span></span>
+                </label>
+                <button
+                  type="button" // Change type to button
+                  className="mt-2 bg-[#FAF5FF] text-[#9854FF] text-[14px] mb-2 px-[14px] py-[7px] rounded-md"
+                  onClick={handleAddAudioClick} // Trigger file input click
+                >
+                  Add Audio
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          disabled={loading}
+          className="w-full mt-7 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
-          {loading ? "Creating..." : "Create Campaign"}
+          Create Campaign
         </button>
       </form>
-      {error && (
-        <p className="text-red-500 mt-4">
-          Error: {error.graphQLErrors?.[0]?.message || error.message}
-        </p>
-      )}
-      {data && (
-        <p className="text-green-500 mt-4">{data.glAdmin.createCampaign.message}</p>
-      )}
-    </div>
     </Layout>
   );
 };
 
-export default CreateCampaignForm;
-
-
-
-   
+export default CreateCampaign;
