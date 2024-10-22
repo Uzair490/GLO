@@ -73,122 +73,153 @@ const CampaignDetail = () => {
   if (!campaign) return <p className="text-center">No campaign found.</p>;
 
   return (
-    <Layout>
-      <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-3xl font-bold mb-6 text-center">{campaign.campaignName}</h2>
-
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Target Audience:</label>
-          <p className="mt-1 text-gray-800">{campaign.targetAudience}</p>
-        </div>
+    <Layout className="max-w-3xl mx-auto  bg-white shadow-md rounded-lg mt-10">
+      <h1 className='mt-12 font-semibold'>Marketing</h1>
+      <div className="container mx-auto  bg-white ">
         
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Description:</label>
-          <p className="mt-1 text-gray-800">{campaign.description}</p>
-        </div>
-        
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Start Date:</label>
-          <p className="mt-1 text-gray-800">{new Date(campaign.startDate).toLocaleDateString()}</p>
-        </div>
-        
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">End Date:</label>
-          <p className="mt-1 text-gray-800">{new Date(campaign.endDate).toLocaleDateString()}</p>
-        </div>
-        
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Campaign Type:</label>
-          <p className="mt-1 text-gray-800">{campaign.campaignType}</p>
-        </div>
-        <div className="flex w-[50%] flex-col"     onChange={(e) => handleFileChange(e, 'imageUrls')}>
-            <p className='pb-1 text-[16px] font-normal'>Photos</p>
-            <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
-            {campaign.imageUrls.length > 0 ? (
-            <div className="flex gap-4 mt-2">
-              {campaign.imageUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Campaign Image ${index + 1}`}
-                  className="h-40 w-40 object-cover rounded-lg shadow"
-                />
-              ))}
+        <main className='border shadow-md rounded-lg p-4'>
+          <p className='text-[18px] font-semibold'>General Information</p>
+          <section className='flex gap-4 w-full'>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Campaign Name</label>
+              <input
+                type="text"
+                name="campaignName"
+                value={campaign.campaignName}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+                readOnly
+              />
             </div>
-          ) : (
-            <p className="mt-2 text-gray-600">No images available.</p>
-          )}
-              <label htmlFor="imageLo" className="flex items-center justify-center h-full w-full cursor-pointer">
-                <input
-                  type="file"
-                  id="imageLo"
-                  className="hidden"
-                  accept="image/*" 
-                
-                />
-                <span className=" text-[14px] font-normal ">Drag and drop logo image here or click add <span className='flex justify-center'>image</span></span>
-              </label>
-              <button
-                   
-                    className="mt-2 bg-[#FAF5FF] text-[#9854FF] text-[14px] mb-2 px-[14px] py-[7px] rounded-md"
-                  >
-                    Add Image
-                  </button>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Target Audience</label>
+              <input
+                type="text"
+                name="targetAudience"
+                value={campaign.targetAudience}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+                readOnly
+              />
             </div>
+            <div className='w-[33%] my-2'>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Campaign Type</label>
+              <input
+                value={campaign.campaignType}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                readOnly
+              />
+            </div>
+          </section>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <textarea
+              name="description"
+              value={campaign.description}
+              className="mt-1 h-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              rows="4"
+              required
+              readOnly
+            />
           </div>
-        {/* Displaying Images */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Images:</label>
-          {campaign.imageUrls.length > 0 ? (
-            <div className="flex gap-4 mt-2">
-              {campaign.imageUrls.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Campaign Image ${index + 1}`}
-                  className="h-40 w-40 object-cover rounded-lg shadow"
-                />
-              ))}
+          <section className='flex gap-4 mt-2'>
+            <div className='w-[50%]'>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+              <input
+                value={new Date(campaign.startDate).toLocaleDateString()}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+                readOnly
+              />
             </div>
-          ) : (
-            <p className="mt-2 text-gray-600">No images available.</p>
-          )}
-        </div>
+            <div className='w-[50%]'>
+              <label className="block text-sm font-medium mb-1 text-gray-700">End Date</label>
+              <input
+                value={new Date(campaign.endDate).toLocaleDateString()}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                required
+                readOnly
+              />
+            </div>
+          </section>
+        </main>
 
-        {/* Displaying Videos */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Videos:</label>
-          {campaign.videoUrls.length > 0 ? (
-            <div className="flex gap-4 mt-2">
-              {campaign.videoUrls.map((url, index) => (
-                <video key={index} controls className="h-40 w-40 rounded-lg shadow">
-                  <source src={url} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-2 text-gray-600">No videos available.</p>
-          )}
-        </div>
+       
 
-        {/* Displaying Audios */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold">Audio:</label>
-          {campaign.audioUrls.length > 0 ? (
-            <div className="flex gap-4 mt-2">
-              {campaign.audioUrls.map((url, index) => (
-                <audio key={index} controls className="h-20 rounded-lg shadow">
-                  <source src={url} type="audio/mpeg" />
-                  Your browser does not support the audio tag.
-                </audio>
-              ))}
-            </div>
-          ) : (
-            <p className="mt-2 text-gray-600">No audio files available.</p>
-          )}
-        </div>
       </div>
+      <main className='border mt-7 shadow-md rounded-lg p-4'>
+          <p className='text-[18px] font-semibold'>Media</p>
+          <section className='flex gap-6 mt-2'>
+          
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Photos</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                  
+                  alt="Uploaded Logo"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="imageLo" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                 
+                    className="hidden"
+                    accept="image/*"
+                   
+                  />
+                  
+                </label>
+               
+              </div>
+            </div>
+
+          
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Videos</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                
+                  alt="Uploaded Video"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="videoUpload" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                   
+                    className="hidden"
+                    accept="video/*"
+                   
+                  />
+                 
+                </label>
+               
+              </div>
+            </div>
+
+            {/* Audio Upload Section */}
+            <div className="flex w-[50%] flex-col">
+              <p className='pb-1 text-[16px] font-normal'>Audio</p>
+              <div className="flex flex-col items-center border border-gray-300 p-2 rounded-md">
+                <img
+                
+                  alt="Uploaded Audio"
+                  className="mb-2 w-10 h-10 object-cover"
+                />
+                <label htmlFor="audioUpload" className="flex items-center justify-center h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                  
+                    className="hidden"
+                    accept="audio/*"
+                   
+                  />
+                 
+                </label>
+               
+              </div>
+            </div>
+          </section>
+        </main>
     </Layout>
   );
 };

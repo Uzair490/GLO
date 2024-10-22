@@ -127,6 +127,7 @@ export const DELETE_CAMPAIGNS = gql`
 export const UPDATE_CAMPAIGN = gql`
   mutation UpdateCampaign(
     $id: String!,
+    $campaignType:String!,
     $campaignName: String!,
     $targetAudience: String!,
     $description: String!,
@@ -146,6 +147,7 @@ export const UPDATE_CAMPAIGN = gql`
           targetAudience: $targetAudience,
           description: $description,
           startDate: $startDate,
+        campaignType:$campaignType
           endDate: $endDate,
           publishStatus: $publishStatus,
           activeStatus: $activeStatus,
@@ -159,6 +161,7 @@ export const UPDATE_CAMPAIGN = gql`
           message
           campaign {
             id
+            campaignType
             campaignName
             targetAudience
             description

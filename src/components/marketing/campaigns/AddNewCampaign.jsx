@@ -64,13 +64,13 @@ const CreateCampaign = () => {
 
   const handleAddVideoClick = () => {
     if (videoInputRef.current) {
-      videoInputRef.current.click(); // Trigger video input click
+      videoInputRef.current.click();
     }
   };
 
   const handleAddAudioClick = () => {
     if (audioInputRef.current) {
-      audioInputRef.current.click(); // Trigger audio input click
+      audioInputRef.current.click(); 
     }
   };
 
@@ -86,6 +86,7 @@ const CreateCampaign = () => {
               <input
                 type="text"
                 name="campaignName"
+                placeholder='Enter Campaign Name'
                 value={campaignData.campaignName}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -95,6 +96,7 @@ const CreateCampaign = () => {
             <div className='w-[33%] my-2'>
               <label className="block text-sm font-medium text-gray-700 mb-2">Target Audience</label>
               <input
+              placeholder='Select Target Audiance'
                 type="text"
                 name="targetAudience"
                 value={campaignData.targetAudience}
@@ -108,6 +110,7 @@ const CreateCampaign = () => {
               <input
                 type="text"
                 name="campaignType"
+                placeholder='Select Campaign Type'
                 value={campaignData.campaignType}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -123,11 +126,12 @@ const CreateCampaign = () => {
               onChange={handleChange}
               className="mt-1 h-10 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               rows="4"
+              placeholder='WriteDescription'
               required
             />
           </div>
           <section className='flex gap-4 mt-2'>
-            <div className='w-[33%]'>
+            <div className='w-[50%]'>
               <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
               <input
                 type="date"
@@ -138,7 +142,7 @@ const CreateCampaign = () => {
                 required
               />
             </div>
-            <div className='w-[33%]'>
+            <div className='w-[50%]'>
               <label className="block text-sm font-medium mb-1 text-gray-700">End Date</label>
               <input
                 type="date"
@@ -244,12 +248,22 @@ const CreateCampaign = () => {
           </section>
         </main>
 
-        <button
-          type="submit"
-          className="w-full mt-7 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          Create Campaign
-        </button>
+        <div className="flex justify-end mt-7 gap-4 pb-20">
+    
+    <button
+      type="button" 
+      className=" bg-white text-[#9854FF]  h-[33px] border-[1px] border-[#9854FF] text-[16px]  font-semibold px-[14px] rounded "
+      onClick={() => window.history.back()} 
+    >
+      X Cancel
+    </button>
+    <button
+      type="submit"
+      className=" bg-[#9854FF] h-[33px] border-[1px]  text-white text-[16px] font-semibold  px-[14px] rounded "
+    >
+      Submit
+    </button>
+  </div>
       </form>
     </Layout>
   );

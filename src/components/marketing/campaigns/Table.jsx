@@ -4,10 +4,17 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import pencil from '../../../assets/pencil.svg';
 import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import share from '../../../assets/share.svg';
+import search from '../../../assets/search.svg'
+import Bulk from '../../../assets/Bulk.svg'
+import Filte from '../../../assets/Filte.svg'
+import Filterto from '../../../assets/Filterto.svg'
+import Export from '../../../assets/Export.svg'
 
+import filter from '../../../assets/filter.svg'
+import Dropdown from './Dropdown';
 const GET_ALL_CAMPAIGNS = gql`
-  query AllCampaigns($date: String, $searchText: String) {
-    allCampaigns(input: { page: 1, date: $date, searchText: $searchText }) {
+  query AllCampaigns($date: String,$campaignStatus: Boolean!, $searchText: String,$campaignType: String!) {
+    allCampaigns(input: { page: 1, date: $date,campaignStatus: $campaignStatus, searchText: $searchText,campaignType: $campaignType }) {
       ... on CampaignResponse {
         status
         message
@@ -90,16 +97,23 @@ const DELETE_CAMPAIGNS = gql`
   }
 `;
 
-const Table = () => {
+const Tableo = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [searchText, setSearchText] = useState("");
+  const [campaignStatus, setCampaignStatus] = useState(true);
+  const [campaignType, setCampaignType] = useState(""); 
   const { loading, error, data, refetch } = useQuery(GET_ALL_CAMPAIGNS, {
-    variables: { date: selectedDate, searchText }, // Pass the selected date and search text as variables
+    variables: { date: selectedDate, searchText,campaignStatus,campaignType}, // Pass the selected date and search text as variables
   });
 
   const [deleteCampaign] = useMutation(DELETE_CAMPAIGNS, {
-    refetchQueries: [{ query: GET_ALL_CAMPAIGNS, variables: { date: selectedDate, searchText } }],
+    refetchQueries: [{ query: GET_ALL_CAMPAIGNS, variables: { date: selectedDate, searchText,campaignStatus,campaignType } }],
   });
 
   if (loading) return <p className="text-center text-gray-500">Loading...</p>;
@@ -127,18 +141,135 @@ const Table = () => {
 
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
-    refetch(); // Refetch campaigns with the new date
+    refetch(); 
   };
 
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
-    refetch(); // Refetch campaigns with the new search text
+    refetch();
+  };
+  const handleStatusChange = (e) => {
+    setCampaignStatus(e.target.value === "true");
+    refetch();
   };
 
+  const handleTypeChange = (e) => {
+    setCampaignType(e.target.value);
+    refetch();
+  };
   return (
     <div className="container mx-auto">
-      <div className="flex justify-between items-center mb-4">
-        <label htmlFor="date" className="font-semibold">Filter by Date:</label>
+     <div className='flex gap-2 mb-4 justify-between mt-4 '>
+<div className="flex rounded-lg h-9  w-[27%] mt-1 items-center pr-2 border p-[6px] ">
+  <input
+    type="text"
+    className="flex-1 placeholder:text-[15px] pl-2  outline-none "
+    placeholder="Search Campaigns"
+    value={searchText}
+    onChange={handleSearchChange}
+  />
+  <img src={search} alt="error" className="w-[18px]   mt-1 h-[20px]" />
+</div>
+
+   
+<div className='flex w-[70%] gap-4'>
+
+ <p className=' my-1 button-style'>  <img src={Export}  alt="error" className='w-3 h-2'  /> <p className='text-[12px] text-black'>Export </p> </p>
+ <p className=' my-1 button-style'>  <img src={filter}  alt="error" className='w-3 h-2'  /> <p className='text-[12px] text-black'>Filters</p> </p>
+
+ <div className="relative inline-block text-left">
+      <div>
+        <button
+          onClick={toggleDropdown}
+          onChange={handleStatusChange}
+  value={campaignStatus.toString()}
+          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          Dropdown
+          <svg
+            className="-mr-1 ml-2 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06 0L10 10.44l3.71-3.23a.75.75 0 011.04 1.14l-4.25 3.5a.75.75 0 01-1.04 0l-4.25-3.5a.75.75 0 010-1.14z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <a
+            value="true"
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
+            >
+              Option 1
+            </a>
+            <a value="false"
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
+            >
+              Option 2
+            </a>
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
+            >
+              Option 3
+            </a>
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              role="menuitem"
+            >
+              Option 4
+            </a>
+          </div>
+        </div>
+      )}
+    </div>
+<div>
+ 
+ <select
+  id="status"
+  onChange={handleStatusChange}
+  value={campaignStatus.toString()}
+ 
+>
+  
+  <option value="" disabled>
+    Status
+  </option>
+  <option value="true">Published</option>
+  <option value="false">Unpublished</option>
+</select>
+</div>
+
+ 
+ <select
+          id="type"
+          onChange={handleTypeChange}
+          value={campaignType}
+          className="border rounded p-1 ml-2"
+        >
+          <option value="">All Campaigns</option>
+          <option value="promotional">Promotional Campaign</option>
+          <option value="user_engagement">User Engagement Campaign</option>
+          <option value="advertising">Advertising Campaign</option>
+          {/* Add more campaign types as needed */}
+        </select>
+<img src={Bulk} alt="Bulk" className='h-4 w-4' />
+   
         <input
           type="date"
           id="date"
@@ -146,16 +277,9 @@ const Table = () => {
           onChange={handleDateChange}
           className="border rounded p-1"
         />
-        <label htmlFor="search" className="font-semibold ml-4">Search:</label>
-        <input
-          type="text"
-          id="search"
-          value={searchText}
-          onChange={handleSearchChange}
-          placeholder="Search by name"
-          className="border rounded p-1 ml-2"
-        />
-      </div>
+
+ </div>
+ </div>
       <div className="hidden sm:flex border-b border-gray-300 py-2 bg-gray-100">
         <div className="w-[20%] pl-3">
           <p className="font-semibold">Campaign</p>
@@ -217,12 +341,12 @@ const Table = () => {
             <EyeIcon
               className="h-4 w-4 text-gray-500 cursor-pointer"
               aria-hidden="true"
-              onClick={() => navigate(`/campaign-detail/${campaign.id}`)} // Navigate to campaign details
+              onClick={() => navigate(`/campaign-detail/${campaign.id}`)} 
             />
             <TrashIcon
               className="h-4 w-4 text-gray-500 cursor-pointer"
               aria-hidden="true"
-              onClick={() => handleDelete(campaign.id)} // Call the delete function
+              onClick={() => handleDelete(campaign.id)} 
             />
           </div>
           <div className="w-[50%] flex justify-center sm:w-[14%]">
@@ -239,4 +363,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default Tableo;

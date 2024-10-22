@@ -13,6 +13,7 @@ import Table from "./Table";
 import { Link, useNavigate } from "react-router-dom";
 
 import search from '../.././../assets/search.svg'
+import Tableo from "./Tableo";
 const Campaigns = () => {
  
 
@@ -53,7 +54,7 @@ const Campaigns = () => {
 
 
 
-<div className='flex gap-2 mb-4 justify-between mt-4 '>
+{ <div className='flex gap-2 mb-4 justify-between mt-4 '>
 <div className="flex rounded-lg h-9  w-[27%] mt-1 items-center pr-2 border p-[6px] ">
   <input
     type="text"
@@ -77,9 +78,10 @@ const Campaigns = () => {
  <p className=' my-1 pl-3 button-style'>   <span className='text-[12px] text-black'>Date</span> <img src={Bulk} alt="Bulk" className='h-4 w-4' /></p>
 
  </div>
- </div>
+ </div>  }
       <div> 
        <Table/>
+       <Tableo/>
       </div>
      
     </div>
