@@ -5,13 +5,12 @@ import pencil from '../../../assets/pencil.svg';
 import { EyeIcon, TrashIcon } from '@heroicons/react/24/outline';
 import share from '../../../assets/share.svg';
 import search from '../../../assets/search.svg'
-import Bulk from '../../../assets/Bulk.svg'
-import Filte from '../../../assets/Filte.svg'
-import Filterto from '../../../assets/Filterto.svg'
+
+import CampaignFilter from './CampaignFilter'
 import Export from '../../../assets/Export.svg'
 
 import filter from '../../../assets/filter.svg'
-import Dropdown from './Dropdown';
+
 const GET_ALL_CAMPAIGNS = gql`
   query AllCampaigns($date: String,$campaignStatus: Boolean!, $searchText: String,$campaignType: String!) {
     allCampaigns(input: { page: 1, date: $date,campaignStatus: $campaignStatus, searchText: $searchText,campaignType: $campaignType }) {
@@ -99,17 +98,23 @@ const DELETE_CAMPAIGNS = gql`
 
 const Tableo = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const handleStatusChange = (status) => {
+    setCampaignStatus(status);
+    setIsOpen(false); 
+  };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
+
+  const[isDropdownOpen,setDropdownOpen]=useState(false)
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState("");
   const [searchText, setSearchText] = useState("");
   const [campaignStatus, setCampaignStatus] = useState(true);
   const [campaignType, setCampaignType] = useState(""); 
   const { loading, error, data, refetch } = useQuery(GET_ALL_CAMPAIGNS, {
-    variables: { date: selectedDate, searchText,campaignStatus,campaignType}, // Pass the selected date and search text as variables
+    variables: { date: selectedDate, searchText,campaignStatus,campaignType}, 
   });
 
   const [deleteCampaign] = useMutation(DELETE_CAMPAIGNS, {
@@ -148,11 +153,7 @@ const Tableo = () => {
     setSearchText(e.target.value);
     refetch();
   };
-  const handleStatusChange = (e) => {
-    setCampaignStatus(e.target.value === "true");
-    refetch();
-  };
-
+ 
   const handleTypeChange = (e) => {
     setCampaignType(e.target.value);
     refetch();
@@ -175,17 +176,15 @@ const Tableo = () => {
 <div className='flex w-[70%] gap-4'>
 
  <p className=' my-1 button-style'>  <img src={Export}  alt="error" className='w-3 h-2'  /> <p className='text-[12px] text-black'>Export </p> </p>
- <p className=' my-1 button-style'>  <img src={filter}  alt="error" className='w-3 h-2'  /> <p className='text-[12px] text-black'>Filters</p> </p>
+ <p className='  p-[6px] w-[75px] flex items-center gap-2;'>  <img src={filter}  alt="error" className='w-3 h-2'  /> <p className='text-[12px] text-black'>Filters</p> </p>
 
- <div className="relative inline-block text-left">
-      <div>
+<div className="relative inline-block text-left">
+      <div  className='mt-1 '>
         <button
-          onClick={toggleDropdown}
-          onChange={handleStatusChange}
-  value={campaignStatus.toString()}
-          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          onClick={toggleDropdown} 
+         className="flex border py-[6px] text-[14px] text-[#667085] rounded-lg px-3"
         >
-          Dropdown
+          Status
           <svg
             className="-mr-1 ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
@@ -205,78 +204,143 @@ const Tableo = () => {
       {isOpen && (
         <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
           <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <a
-            value="true"
-              href="#"
+            <p
+           
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem"
+           
+              onClick={() => handleStatusChange(true)}
             >
-              Option 1
-            </a>
-            <a value="false"
-              href="#"
+            Active Campaigns
+            </p>
+            <p
+           
+              className="block px-4 py-2 hover:bg-black text-sm text-gray-700"
+           
+              onClick={() => handleStatusChange(true)}
+            >
+              Published Campaigns
+            </p>
+            <p
+            
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem"
+            
+              onClick={() => handleStatusChange(false)}
             >
-              Option 2
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem"
-            >
-              Option 3
-            </a>
-            <a
-              href="#"
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-              role="menuitem"
-            >
-              Option 4
-            </a>
+              Unpublished Campaigns
+            </p>
           </div>
         </div>
       )}
+
+     
     </div>
-<div>
- 
- <select
-  id="status"
-  onChange={handleStatusChange}
-  value={campaignStatus.toString()}
- 
->
-  
-  <option value="" disabled>
-    Status
-  </option>
-  <option value="true">Published</option>
-  <option value="false">Unpublished</option>
-</select>
-</div>
+
 
  
- <select
-          id="type"
-          onChange={handleTypeChange}
-          value={campaignType}
-          className="border rounded p-1 ml-2"
+    <div>
+      <div className="relative inline-block text-left">
+        <div>
+          <button
+            onClick={() => setDropdownOpen(!isDropdownOpen)}
+             className="flex border py-[6px] text-[14px] text-[#667085] rounded-lg px-3 mt-1"
+          >
+            {campaignType || "Select Campaign"}
+            <svg
+              className="-mr-1 ml-2 h-5 w-5"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06 0L10 10.44l3.71-3.23a.75.75 0 011.04 1.14l-4.25 3.5a.75.75 0 01-1.04 0l-4.25-3.5a.75.75 0 010-1.14z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {isDropdownOpen && (
+          <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+              <p
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleTypeChange({ target: { value: "promotional" } })}
+              >
+                Promotional Campaign
+              </p>
+              <p
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleTypeChange({ target: { value: "user_engagement" } })}
+              >
+                User Engagement Campaign
+              </p>
+              <p
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onClick={() => handleTypeChange({ target: { value: "advertising" } })}
+              >
+                Advertising Campaign
+              </p>
+             
+            </div>
+          </div>
+        )}
+      </div>
+
+    
+    </div>
+    
+    <div className="relative inline-block text-left">
+      <div  className='mt-1 '>
+        <button
+          onClick={toggleDropdown} 
+         className="flex border py-[6px] text-[14px] text-[#667085] rounded-lg px-3"
         >
-          <option value="">All Campaigns</option>
-          <option value="promotional">Promotional Campaign</option>
-          <option value="user_engagement">User Engagement Campaign</option>
-          <option value="advertising">Advertising Campaign</option>
-          {/* Add more campaign types as needed */}
-        </select>
-<img src={Bulk} alt="Bulk" className='h-4 w-4' />
-   
-        <input
+          Date
+          <svg
+            className="-mr-1 ml-2 h-5 w-5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M5.23 7.21a.75.75 0 011.06 0L10 10.44l3.71-3.23a.75.75 0 011.04 1.14l-4.25 3.5a.75.75 0 01-1.04 0l-4.25-3.5a.75.75 0 010-1.14z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </button>
+      </div>
+
+      {isOpen && (
+        <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+          <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+           
+            
+            <p
+            
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              onChange={handleDateChange}
+              value={selectedDate}
+            >
+            Select date
+            </p>
+          </div>
+        </div>
+      )}
+
+     
+    </div>
+  
+      { /* <input
           type="date"
           id="date"
           value={selectedDate}
           onChange={handleDateChange}
           className="border rounded p-1"
-        />
+        />*/ }
 
  </div>
  </div>
@@ -303,6 +367,8 @@ const Tableo = () => {
           <p className="font-semibold pl-[19px]">Shares</p>
         </div>
       </div>
+ 
+     
       {campaigns.map((campaign) => (
         <div key={campaign.id} className="flex flex-wrap sm:flex-nowrap border-b border-gray-300 py-2">
           <div className="w-full pt-1 sm:w-[20%]">
@@ -327,7 +393,7 @@ const Tableo = () => {
             <p className="text-[14px] pt-1">{new Date(campaign.endDate).toLocaleDateString()}</p>
           </div>
           <div className="w-[50%] sm:w-[10%] mt-2 sm:mt-0">
-            <p className={`bg-[#FFF0EA] rounded-md font-semibold pl-[8px] text-[11px] pt-1 w-[83%] p-[2px] ${campaign.publishStatus ? 'text-green-700' : 'text-[#F97316]'}`}>
+            <p className={`bg-[#E9FAF7] rounded-md font-semibold pl-[8px] text-[11px] pt-1 w-[73%] p-[4px] ${campaign.publishStatus ? 'text-[#1A9882]' : 'text-[#F97316]'}`}>
               {campaign.publishStatus ? 'Published' : 'Unpublished'}
             </p>
           </div>
@@ -339,6 +405,7 @@ const Tableo = () => {
               onClick={() => navigate(`/update-campaign/${campaign.id}`)}
             />
             <EyeIcon
+
               className="h-4 w-4 text-gray-500 cursor-pointer"
               aria-hidden="true"
               onClick={() => navigate(`/campaign-detail/${campaign.id}`)} 
@@ -359,6 +426,7 @@ const Tableo = () => {
           </div>
         </div>
       ))}
+      <CampaignFilter/>
     </div>
   );
 };

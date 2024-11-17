@@ -13,8 +13,8 @@ import avat from '../../assets/avat.svg';
 
 const All = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Change this to the number of items you want per page
-  const totalItems = 20; // Replace this with your total number of items
+  const itemsPerPage = 8; 
+  const totalItems = 20; 
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const handlePageChange = (page) => {

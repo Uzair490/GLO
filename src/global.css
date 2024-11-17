@@ -8,7 +8,7 @@
   }
   
   .reusable-actions {
-    @apply flex space-x-4;
+    @apply flex gap-1
   }
   
   .reusable-checkbox {

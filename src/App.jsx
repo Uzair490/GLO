@@ -40,6 +40,8 @@ import MarketingMain  from '../src/components/marketing/MarketingMain'
 import NotificationsComponent from './components/notifications/NotificationsComponent'
 import UpdateCampaign from './components/marketing/campaigns/UpdateCampaign'
 import CampaignDetail from './components/marketing/campaigns/CampaignDetail'
+import Customerdetails from './pages/Customerdetails'
+import UpdateCustomer from './pages/Customers/UpdateCustomer'
 
 const App = () => {
   return (
@@ -58,7 +60,7 @@ const App = () => {
       <Route path='/addnewadmin' element={<AddNewAdmin/>}/>
       <Route path='/earnings' element={<Earnings/>}/>
      
-      <Route path='/accountdetails'  element={<AccountDetails/>}/>
+      
       <Route path='/accountusers' element={<AccountUsers/>}/>
       <Route path='/addnewcustomer' element={<Addnewcustomer/>}  />
       <Route path='/customers' element={<Customers/>} />
@@ -75,7 +77,7 @@ const App = () => {
 <Route path='/PricePackagesManagement' element={<PricePackage/>}/>
 <Route path='/Profilesettings' element={<ProfileSetting/>}/>
 <Route path='/CustomerSupport' element={<CustomerSupport/>}/>
-{/*Enterprise Admin */}
+
 
 
 <Route
@@ -96,7 +98,8 @@ const App = () => {
 <Route path="/notification" element={<NotificationsComponent/>}/>
 <Route path="/campaign-detail/:id" element={<CampaignDetail />} />
 <Route path="/update-campaign/:id" element={<UpdateCampaign />} />
-
+<Route path="/account-details/:id" element={<AccountDetails />} />
+<Route path="/update-customer/:id" element={<UpdateCustomer />} />
     </Routes>
   
     </>

@@ -11,12 +11,12 @@ const Customerbar = () => {
       : 'text-black';
   };
 
-  // Generate the path segments for breadcrumbs
+
   const pathSegments = location.pathname.split('/').filter(Boolean);
 
   return (
     <div>
-      {/* Breadcrumbs */}
+     
       <div className='flex items-center gap-3'>
         <p className='text-[11px]'>Customers</p>
         <img src={Vector} alt="arrow" />

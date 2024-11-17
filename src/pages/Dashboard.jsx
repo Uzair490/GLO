@@ -14,7 +14,53 @@ import Layout from '../components/Layout'
  import Activeuser from '../assets/Activeuser.svg'
  import Camp from '../assets/Camp.svg'
  import Totals from '../assets/Totals.svg'
+ import DashboardDataComponent from '../components/DashboardDataComponent'
+ import { gql,useQuery } from '@apollo/client'
+import Analytic from './Analytic'
+ const GET_DASHBOARD_DATA = gql`
+    query GlAdmin {
+        glAdmin {
+            DashboardData {
+                ... on TotalCountsResponse {
+                    totalIndividualCustomers
+                    percentageIndividualCustomerChange
+                    totalEnterpriseCustomers
+                    percentageEntCustomerChange
+                    totalAdvisorCustomers
+                    percentageAdvisorChange
+                    todaysTotalAmount
+                    percentageTotalAmountChange
+                    totalActiveCustomers
+                    percentageChange
+                    totalActiveCampaigns
+                    activeCampaignsPercentageChange
+                    totalPosts
+                    postChangePercentage
+                }
+                ... on Error {
+                    status
+                    message
+                }
+            }
+        }
+    }
+`;
 const Dashboard = () => {
+  const { loading, error, data } = useQuery(GET_DASHBOARD_DATA);
+
+  if (loading) return <p className="text-blue-600">Loading...</p>;
+  if (error) return <p className="text-red-500">Error: {error.message}</p>;
+
+  const dashboardData = data?.glAdmin?.DashboardData;
+
+  if (dashboardData.__typename === "Error") {
+      return (
+          <div className="bg-red-100 p-4 rounded-lg text-red-600">
+              <h3>Error {dashboardData.status}</h3>
+              <p>{dashboardData.message}</p>
+          </div>
+      );
+  }
   return (
     <Layout>
       <h1 className='text-[30px] font-semibold'>Welcome Jay</h1>
@@ -24,9 +70,9 @@ const Dashboard = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Total Revenue</p>
-  <p className="text-xl  font-bold">$20,000</p>
+  <p className="text-xl  font-bold">{dashboardData.todaysTotalAmount}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>{dashboardData.percentageIndividualCustomerChange}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -37,9 +83,9 @@ const Dashboard = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Active Users</p>
-  <p className="text-xl  font-bold">5000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalActiveCustomers}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'> {dashboardData.percentageChange}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -49,9 +95,9 @@ const Dashboard = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Total Pin/Post</p>
-  <p className="text-xl  font-bold">2,000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalPosts}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>{dashboardData.postChangePercentage}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -61,9 +107,9 @@ const Dashboard = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Campaigns</p>
-  <p className="text-xl  font-bold">1000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalActiveCampaigns}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>{dashboardData.activeCampaignsPercentageChange}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -85,23 +131,23 @@ const Dashboard = () => {
 
 <div className=' border shadow-lg p-4'>
   <h1 className='font-semibold text-[22px]'>Enterprise Users</h1>
-  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>150</p>
-  <p className='text-[#32D583] text font-semibold '>20%</p></div>
+  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>{dashboardData.totalEnterpriseCustomers}</p>
+  <p className='text-[#32D583] text font-semibold '>{dashboardData.percentageEntCustomerChange}</p></div>
 </div>
 <div className=' border shadow-lg p-4'>
-  <h1 className='font-semibold text-[22px]'>Individual Users </h1>
-  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>1k</p>
-  <p className='text-[#32D583]  font-semibold '>20%</p></div>
+  <h1 className='font-semibold text-[22px]'>Individual Users  </h1>
+  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>{dashboardData.totalIndividualCustomers}</p>
+  <p className='text-[#32D583]  font-semibold '> {dashboardData.percentageIndividualCustomerChange}</p></div>
 </div>
 <div className=' border shadow-lg p-4'>
   <h1 className='font-semibold text-[22px]'>Advisors</h1>
-  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>230</p>
-  <p className='text-[#FF675B]  font-semibold '>20%</p></div>
+  <div className='flex justify-between '><p className='text-[#9854FF] text-[25px] font-semibold'>{dashboardData.totalAdvisorCustomers}</p>
+  <p className='text-[#FF675B]  font-semibold '> {dashboardData.percentageAdvisorChange}</p></div>
 </div>
 </section>
 
-<div className='w-[63%]'>
-<img src={analytics} alt="error" />
+<div className='w-[70%]'>
+<Analytic/>
 </div>
 <div>
 
@@ -109,7 +155,7 @@ const Dashboard = () => {
 </div>
 
 
-    {/*  Table */}
+   
     
 <div className='flex w-full gap-10 justify-between'>
 <div className='w-[70%]'>
@@ -217,6 +263,8 @@ const Dashboard = () => {
     </section>
    
     </div>
+   
+    
     </Layout>
   )
 }

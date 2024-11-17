@@ -101,7 +101,7 @@ export const GET_ALL_CAMPAIGNS = gql`
   }
 `;
 
-// Mutation to delete (soft-delete) a campaign
+
 export const DELETE_CAMPAIGNS = gql`
   mutation DeleteCampaign($id: String!) {
     glAdmin {
@@ -133,8 +133,8 @@ export const UPDATE_CAMPAIGN = gql`
     $description: String!,
     $startDate: DateTime!,
     $endDate: DateTime!,
-    $publishStatus: Boolean!,
-    $activeStatus: Boolean!,
+    
+    
     $imageUrls: [String!]!,
     $videoUrls: [String!]!,
     $audioUrls: [String!]!
@@ -149,8 +149,8 @@ export const UPDATE_CAMPAIGN = gql`
           startDate: $startDate,
         campaignType:$campaignType
           endDate: $endDate,
-          publishStatus: $publishStatus,
-          activeStatus: $activeStatus,
+          
+          
           imageUrls: $imageUrls,
           videoUrls: $videoUrls,
           audioUrls: $audioUrls
@@ -182,3 +182,76 @@ export const UPDATE_CAMPAIGN = gql`
     }
   }
 `;
+export const UPDATE_CUSTOMER=gql`
+mutation GlAdmin( $id: String!,
+$name:String!) {
+  glAdmin {
+      updateEnterpriseCustomer(
+      input:{id: $id, 
+          name: $name,}
+      ) {
+          ... on EnterpriseCustomerResponse {
+              status
+              message
+              customer {
+                  id
+                  name
+                  email
+                  avatarUrl
+                  customerId
+                  role
+                  customerStatus
+                  accountType
+                  pricePlan
+                  countryState
+                  isDeleted
+                  deletedAt
+                  updatedAt
+                  createdAt
+                  otherContactInfo {
+                      name
+                      contactNumber
+                  }
+              }
+          }
+          ... on Error {
+              status
+              message
+          }
+      }
+  }
+}`
+export const ALL_CUSTOMERS_QUERY = gql`
+  query AllCustomers($id: String!) {
+    allCustomers(input: { id: $id }) {
+      ... on Error {
+        status
+        message
+      }
+      ... on EnterpriseCustomerResponse {
+        status
+        message
+        customer {
+          id
+          name
+          email
+          avatarUrl
+          customerId
+          role
+          customerStatus
+          accountType
+          pricePlan
+          countryState
+          isDeleted
+          deletedAt
+          updatedAt
+          createdAt
+          otherContactInfo {
+            name
+            contactNumber
+          }
+        }
+      }
+    }
+  }
+`

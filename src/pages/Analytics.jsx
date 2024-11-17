@@ -16,7 +16,51 @@ import TR from '../assets/TR.svg'
  import Totals from '../assets/Totals.svg'
  import filter from '../assets/filter.svg'
  import upp from '../assets/upp.svg'
+ import { gql,useQuery } from '@apollo/client'
+ const GET_DASHBOARD_DATA = gql`
+    query GlAdmin {
+        glAdmin {
+            DashboardData {
+                ... on TotalCountsResponse {
+                    totalIndividualCustomers
+                    percentageIndividualCustomerChange
+                    totalEnterpriseCustomers
+                    percentageEntCustomerChange
+                    totalAdvisorCustomers
+                    percentageAdvisorChange
+                    todaysTotalAmount
+                    percentageTotalAmountChange
+                    totalActiveCustomers
+                    percentageChange
+                    totalActiveCampaigns
+                    activeCampaignsPercentageChange
+                    totalPosts
+                    postChangePercentage
+                }
+                ... on Error {
+                    status
+                    message
+                }
+            }
+        }
+    }
+`;
 const Analytics = () => {
+  const { loading, error, data } = useQuery(GET_DASHBOARD_DATA);
+
+  if (loading) return <p className="text-blue-600">Loading...</p>;
+  if (error) return <p className="text-red-500">Error: {error.message}</p>;
+
+  const dashboardData = data?.glAdmin?.DashboardData;
+
+  if (dashboardData.__typename === "Error") {
+      return (
+          <div className="bg-red-100 p-4 rounded-lg text-red-600">
+              <h3>Error {dashboardData.status}</h3>
+              <p>{dashboardData.message}</p>
+          </div>
+      );
+  }
   return (
     <Layout>
       <div className='flex gap-2 justify-between mt-4 w-full'>
@@ -33,9 +77,9 @@ const Analytics = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Total Pin/Post</p>
-  <p className="text-xl  font-bold">20,000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalPosts}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>{dashboardData.postChangePercentage}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -46,9 +90,9 @@ const Analytics = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Enterprise Users</p>
-  <p className="text-xl  font-bold">20,000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalEnterpriseCustomers}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>{dashboardData.percentageEntCustomerChange}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -58,9 +102,9 @@ const Analytics = () => {
     
     <div>
   <p className="text-gray-700 font-semibold">Orphan Users</p>
-  <p className="text-xl  font-bold">20,000</p>
+  <p className="text-xl  font-bold">{dashboardData.totalIndividualCustomers}</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'>20</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] text-sm font-semibold'> {dashboardData.percentageIndividualCustomerChange}</p><img src={Green} alt="error" /> <p className='text-[12px] mt-[1px] '>Added Today</p>
   </div>
   </div>
  
@@ -140,10 +184,10 @@ const Analytics = () => {
   <div className="border flex justify-between w-[33%] p-2  rounded-lg shadow-md">
     
     <div>
-  <p className="text-gray-700 font-semibold">Total Earnings</p>
+  <p className="text-gray-700 font-semibold"> Packages</p>
   <p className="text-xl  font-bold">$100.00</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] font-semibold'>10%</p><img src={Green} alt="error" /> <p className='text-sm'>Earning Trends</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] font-semibold'>10%</p><img src={Green} alt="error" /> <p className='text-sm'>Earning by price packages</p>
   </div>
   </div>
  
@@ -152,10 +196,10 @@ const Analytics = () => {
   <div className="border flex justify-between w-[33%] p-2  rounded-lg shadow-md">
     
     <div>
-  <p className="text-gray-700 font-semibold">Total Earnings</p>
+  <p className="text-gray-700 font-semibold">Campaigns</p>
   <p className="text-xl  font-bold">$100.00</p>
  
-  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] font-semibold'>10%</p><img src={Green} alt="error" /> <p className='text-sm'>Earning Trends</p>
+  <div className='flex gap-1 mt-2  '><p className='text-[#1A9882] font-semibold'>10%</p><img src={Green} alt="error" /> <p className='text-sm'>Earning By Campaigns</p>
   </div>
   </div>
  

@@ -11,7 +11,7 @@ import Vector from '../assets/Vector.svg'
 import pencil from '../assets/pencil.svg'
 import Customerbar from '../components/Customerbar';
 
-// bread crums
+
 const Customers = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [selectAll, setSelectAll] = useState(false);

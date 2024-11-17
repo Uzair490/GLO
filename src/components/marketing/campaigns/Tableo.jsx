@@ -86,7 +86,7 @@ const Tableo = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [searchText, setSearchText] = useState("");
   const [campaignStatus, setCampaignStatus] = useState(true);
-  const [campaignType, setCampaignType] = useState(""); // Default value set to empty
+  const [campaignType, setCampaignType] = useState(""); 
 
   const { loading, error, data, refetch } = useQuery(GET_ALL_CAMPAIGNS, {
     variables: { date: selectedDate, searchText, campaignStatus, campaignType },
